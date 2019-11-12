@@ -1,0 +1,222 @@
+,TV,baby_monitor,lights,motion_sensor,security_camera,smoke_detector,socket,thermostat,watch,water_sensor
+0,"{'model': 2096     TV_forest_entropy_3
+2097              TV_MLP_1_1
+2098          TV_MLP_1_1_sgd
+2099              TV_MLP_1_2
+2100              TV_MLP_1_3
+                ...         
+4705    TV_forest_entropy_15
+4706          TV_MLP_4_5_sgd
+4707          TV_MLP_4_5_sgd
+4708              TV_MLP_2_2
+4709              TV_MLP_2_2
+Name: model, Length: 304, dtype: object, 'opt_seq_len': 2096    1
+2097    1
+2098    1
+2099    1
+2100    1
+       ..
+4705    1
+4706    1
+4707    1
+4708    1
+4709    1
+Name: opt_seq_len, Length: 304, dtype: int64}","{'model': 0                            baby_monitor_MLP_5_3
+1                             baby_monitor_forest
+2                            baby_monitor_MLP_3_5
+3                                baby_monitor_sgd
+4                  baby_monitor_forest_entropy_23
+                          ...                    
+147    baby_monitor_cart_entropy_100_samples_leaf
+148       baby_monitor_cart_gini_400_samples_leaf
+149                          baby_monitor_MLP_5_2
+150                          baby_monitor_MLP_1_4
+151                          baby_monitor_MLP_5_4
+Name: model, Length: 152, dtype: object, 'opt_seq_len': 0      1
+1      1
+2      1
+3      1
+4      1
+      ..
+147    1
+148    1
+149    1
+150    1
+151    1
+Name: opt_seq_len, Length: 152, dtype: int64}","{'model': 304           lights_MLP_1_2
+305           lights_MLP_2_5
+306           lights_MLP_3_5
+307           lights_MLP_4_1
+308           lights_MLP_5_2
+               ...          
+451    lights_forest_gini_19
+452    lights_forest_gini_21
+453    lights_forest_gini_23
+454           lights_MLP_3_2
+455       lights_MLP_2_2_sgd
+Name: model, Length: 152, dtype: object, 'opt_seq_len': 304    1
+305    1
+306    1
+307    1
+308    1
+      ..
+451    1
+452    1
+453    1
+454    1
+455    1
+Name: opt_seq_len, Length: 152, dtype: int64}","{'model': 608    motion_sensor_MLP_4_1_sgd
+609    motion_sensor_MLP_4_5_sgd
+610            motion_sensor_sgd
+611    motion_sensor_MLP_5_2_sgd
+612         motion_sensor_forest
+                 ...            
+755        motion_sensor_MLP_3_3
+756        motion_sensor_MLP_3_2
+757        motion_sensor_MLP_4_5
+758        motion_sensor_MLP_4_4
+759        motion_sensor_MLP_3_4
+Name: model, Length: 152, dtype: object, 'opt_seq_len': 608    1
+609    1
+610    1
+611    1
+612    1
+      ..
+755    1
+756    1
+757    1
+758    1
+759    1
+Name: opt_seq_len, Length: 152, dtype: int64}","{'model': 912            security_camera_MLP_3_4
+913            security_camera_MLP_4_3
+914            security_camera_MLP_3_5
+915            security_camera_MLP_4_1
+916        security_camera_MLP_4_5_sgd
+                     ...              
+4553    security_camera_forest_gini_23
+4554       security_camera_MLP_4_5_sgd
+4555       security_camera_MLP_4_5_sgd
+4556       security_camera_MLP_3_3_sgd
+4557       security_camera_MLP_3_3_sgd
+Name: model, Length: 304, dtype: object, 'opt_seq_len': 912     1
+913     1
+914     1
+915     1
+916     1
+       ..
+4553    1
+4554    1
+4555    1
+4556    1
+4557    1
+Name: opt_seq_len, Length: 304, dtype: int64}","{'model': 1216        smoke_detector_forest_gini_7
+1217                 smoke_detector_cart
+1218    smoke_detector_forest_entropy_11
+1219    smoke_detector_forest_entropy_15
+1220    smoke_detector_forest_entropy_19
+                      ...               
+4769          smoke_detector_MLP_5_2_sgd
+4770          smoke_detector_MLP_3_1_sgd
+4771          smoke_detector_MLP_3_1_sgd
+4772          smoke_detector_naive_bayes
+4773          smoke_detector_naive_bayes
+Name: model, Length: 216, dtype: object, 'opt_seq_len': 1216    1
+1217    1
+1218    1
+1219    1
+1220    1
+       ..
+4769    1
+4770    1
+4771    1
+4772    1
+4773    1
+Name: opt_seq_len, Length: 216, dtype: int64}","{'model': 1520       socket_forest_gini_19
+1521              socket_MLP_5_2
+1522    socket_forest_entropy_11
+1523    socket_forest_entropy_15
+1524    socket_forest_entropy_21
+                  ...           
+1667          socket_MLP_3_4_sgd
+1668          socket_MLP_5_2_sgd
+1669          socket_MLP_5_4_sgd
+1670    socket_forest_entropy_23
+1671                  socket_sgd
+Name: model, Length: 152, dtype: object, 'opt_seq_len': 1520    1
+1521    1
+1522    1
+1523    1
+1524    1
+       ..
+1667    1
+1668    1
+1669    1
+1670    1
+1671    1
+Name: opt_seq_len, Length: 152, dtype: int64}","{'model': 1824    thermostat_forest_entropy_3
+1825      thermostat_forest_gini_19
+1826         thermostat_MLP_4_2_sgd
+1827         thermostat_MLP_4_3_sgd
+1828         thermostat_MLP_1_5_sgd
+                   ...             
+1939         thermostat_MLP_5_5_sgd
+1940         thermostat_MLP_1_4_sgd
+1941         thermostat_MLP_1_3_sgd
+1942         thermostat_MLP_3_3_sgd
+1943                 thermostat_sgd
+Name: model, Length: 120, dtype: object, 'opt_seq_len': 1824    1
+1825    1
+1826    1
+1827    1
+1828    1
+       ..
+1939    1
+1940    1
+1941    1
+1942    1
+1943    1
+Name: opt_seq_len, Length: 120, dtype: int64}","{'model': 2400    watch_cart_entropy_100_samples_leaf
+2401    watch_cart_entropy_400_samples_leaf
+2402                             watch_cart
+2403                   watch_forest_gini_11
+2404    watch_cart_entropy_200_samples_leaf
+                       ...                 
+2547       watch_cart_gini_100_samples_leaf
+2548                          watch_MLP_4_4
+2549                      watch_MLP_3_3_sgd
+2550                    watch_forest_gini_3
+2551       watch_cart_gini_200_samples_leaf
+Name: model, Length: 152, dtype: object, 'opt_seq_len': 2400    1
+2401    1
+2402    1
+2403    1
+2404    1
+       ..
+2547    1
+2548    1
+2549    1
+2550    1
+2551    1
+Name: opt_seq_len, Length: 152, dtype: int64}","{'model': 2704    water_sensor_cart_entropy_100_samples_leaf
+2705     water_sensor_cart_entropy_50_samples_leaf
+2706                          water_sensor_MLP_3_2
+2707                          water_sensor_MLP_4_4
+2708                              water_sensor_sgd
+                           ...                    
+2851                   water_sensor_forest_gini_21
+2852                           water_sensor_forest
+2853                water_sensor_forest_entropy_15
+2854                   water_sensor_forest_gini_11
+2855                   water_sensor_forest_gini_23
+Name: model, Length: 152, dtype: object, 'opt_seq_len': 2704    1
+2705    1
+2706    1
+2707    1
+2708    1
+       ..
+2851    1
+2852    1
+2853    1
+2854    1
+2855    1
+Name: opt_seq_len, Length: 152, dtype: int64}"
