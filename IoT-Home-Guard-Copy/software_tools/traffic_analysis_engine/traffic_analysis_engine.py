@@ -21,7 +21,9 @@ class TrafficAnalysisEngine(object):
 		f = open(self.devicename)
 		self.rules = yaml.load(f)
 		#self.device_ip = '172.27.35.73'
-		self.DNS_server_ip = ['224.0.0.251', '8.8.8.8', '4.2.2.2']
+		#self.DNS_server_ip = ['224.0.0.251', '8.8.8.8', '4.2.2.2']
+		self.DNS_server_ip = []
+		self.DNS_server_ip.append(self.rules['DNS Server'])
 		self.domain_ip = []
 		self.domain_ip.append(self.rules['domain'])
 		#print('domain ip: ',self.domain_ip)

@@ -1,4 +1,0 @@
-cmd2>=0.9.4
-pyyaml
-pyserial>=3.4
-pyshark
