@@ -40,6 +40,9 @@ class DeviceSequenceClassifier(DeviceSessionClassifier):
         else:
             return np.array([self.predict_sequence(seq) for seq in sequences])
 
+    def __call__():
+        print("now its callable")
+
     def predict_sequence(self, sequence):
         sess_preds = super().predict(sequence)
         seq_pred = 1 if sess_preds.sum() > (len(sess_preds) / 2) else 0

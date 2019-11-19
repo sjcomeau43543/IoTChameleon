@@ -184,24 +184,59 @@ def test(dataset_csv, use_cols, device, dsc):
         seqs.append(other_dev_sess[i])
 
 
-    print("\n\n\npredicting all validation...")
+    print("predicting all validation...")
     y_actual = [classification] * 99
     predicted = dsc.predict(other_dev_sess)
     print(metrics.accuracy_score(y_actual, predicted))
 
 
-    print("\n\n\npredicting optimal...")
+    print("predicting optimal...")
     y_actual = [classification] * len(seqs)
     predicted = dsc.predict(seqs)
     print(metrics.accuracy_score(y_actual, predicted))
 
 
-use_cols = pd.read_csv(os.path.abspath("data/use_cols.csv"))
+def get_baseline_accuracies():
 
-# test using their data
-device = 'watch'
-model_pkl = r'models/{0}/{0}_cart_entropy_100_samples_leaf.pkl'.format(device)
-test('data/validation.csv', use_cols, 'watch', DeviceSequenceClassifier(device, model_pkl, is_model_pkl=True))
+    use_cols = pd.read_csv(os.path.abspath("data/use_cols.csv"))
+    dataset = 'data/validation.csv'
 
-# test using our data
-# COME HERE WHEN YOU HAVE DATA
+    for root,directory,files in os.walk('./models'):
+        if './models' != root:
+            print("testing", root)
+            for model_pkl in files:
+                print("model", model_pkl)
+                classifier = DeviceSequenceClassifier(root, root+"/"+model_pkl, is_model_pkl=True)
+                try:
+                    test(dataset, use_cols, root.replace("./models","").replace("/",""), classifier)
+                except:
+                    continue
+
+def get_data(dataset_csv, use_cols, device, dsc):
+    validation = utils.load_data_from_csv(dataset_csv, use_cols=use_cols)
+
+    all_sess = dsc.split_data(validation)[0]
+    other_dev_sess = validation.groupby(dsc.y_col).get_group(device)
+    other_dev_sess = dsc.split_data(other_dev_sess)[0]
+
+    classification = 1 if device == device else 0
+
+    # get the optimal sequence length for data
+    opt_seq_len = dsc.find_opt_seq_len(validation)
+    seqs = []
+    for i in range(opt_seq_len):
+        seqs.append(other_dev_sess[i])
+
+    # return sequences
+    return seqs
+
+# get_baseline_accuracies()
+watch_classifier = DeviceSequenceClassifier('./models', "./models/watch/watch_cart_entropy_100_samples_leaf.pkl", is_model_pkl=True)
+watch_data = get_data('data/validation.csv', pd.read_csv(os.path.abspath("data/use_cols.csv")), 'watch', watch_classifier)
+
+import pdb; pdb.set_trace()
+
+print(watch_classifier.model.predict(watch_data[0]))
+# 
+
+
