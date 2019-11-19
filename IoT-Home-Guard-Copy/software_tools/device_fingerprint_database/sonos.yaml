@@ -1,0 +1,40 @@
+---
+#xiaoaitongxue:172.27.35.77(*)
+#Router:172.27.35.7(/)
+#Domain:(-)
+#DNS server:8.8.8.8  4.2.2.2 (!)
+
+device: #(*)
+    - 192.168.1.47
+
+domain: #(-)
+    - 255.255.255.255
+    - 239.255.255.250
+
+router: #(/)
+    - 224.0.0.251
+
+DNS Server: #(!)
+    - 224.0.0.251
+    - 8.8.8.8
+    - 4.2.2.2
+
+packet:
+    - protocol: ARP
+      MAC: 78:28:ca:ba:5b:7c
+
+    - protocol: UDP
+      src_IP: "*"
+      dst_IP: 239.255.255.250
+      src_port: 43751
+      dst_port: 1902
+
+    - protocol: DNS
+      IP: "!"
+      port: 5353
+
+    - protocol: SSDP
+      src_IP: "*"
+      dst_IP: "-"
+      src_port: 34618
+      dst_port: 1900
