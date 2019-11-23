@@ -22,16 +22,22 @@ def main():
     print("Closing UDP socket")
     udp_s.close()
 
-    # c, addr = s.accept()
-    # print("Got connection from {0}".format(addr))
+    # ---- TCP Connection with server ---- #
+    tcp_s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    tcp_s.bind(addr)
+    tcp_s.listen(1)
+    print("TCP socket successfully created; listening on port {0}".format(addr[1]))
 
-    # ---- Receive attacks from client ---- #
-    # while True:
-    #     data = c.recv(1024)
-    #     if not data:
-    #         c.close()
-    #         break
-    #     print("Received: " + data.decode())
+    c, addr = tcp_s.accept()
+    print("Got connection from {0}".format(addr))
+
+    # ---- Receive malware attack from client ---- #
+    while True:
+        data = c.recv(1024)
+        if not data:
+            c.close()
+            break
+        print("Received malware packet: " + data.decode())
 
 if __name__== "__main__":
   main()

@@ -9,7 +9,9 @@ import struct
 import requests
 import sys
 import socket
+import time
 from scapy.all import *
+from requests_toolbelt.utils import dump
 
 '''
 (1) Malware:
@@ -24,9 +26,12 @@ def malware(sock):
     print("Sent malware attack: " + get_req)
     sock.sendall(get_req.encode())
 
-    # ---- Send HTTP request using request library to see full header ---- #
-    r = requests.get('http://' + url_host)
-    print(r.headers)
+    # ---- Send HTTP request using request library to see full packet ---- #
+    response = requests.get('http://' + url_host)
+    data = dump.dump_response(response, response_prefix=b'RESPONSE: ')
+    request = data[:data.find(b'RESPONSE: ')]
+    #data = dump._dump_request_data(response.request, dump.PrefixSettings(b'< ', b'> '), bytearray())
+    print(request.decode())
 
     # req = HTTP()/HTTPRequest(
     #     Accept_Encoding=b'gzip, deflate',
@@ -83,18 +88,25 @@ def main():
 
     # ---- UDP Connection with server ---- #
     udp_s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    print("Created UDP socket")
 
     # ---- Spyware attack ---- #
     spyware(udp_s, server_addr)
 
-    # # ---- TCP Connection with server ---- #
-    # s.connect(server_addr)
-    #
-    # print("Connected to malicious server at {0}".format(server_addr))
-    #
-    # # ---- Malware attack ---- #
-    # malware(s)
-    # s.close()
+    print("Closing UDP socket")
+    udp_s.close()
+    time.sleep(1)
+
+    # ---- TCP Connection with server ---- #
+    tcp_s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    tcp_s.connect(server_addr)
+
+    print("Connected to TCP socket at {0}".format(server_addr))
+
+    # ---- Malware attack ---- #
+    malware(tcp_s)
+    print("Closing TCP socket")
+    tcp_s.close()
 
 if __name__== "__main__":
   main()
