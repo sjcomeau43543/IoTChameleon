@@ -25,7 +25,7 @@ def malware():
 '''
 (2) Spyware:
 UDP to a malicious server from: compromised IoT device & data sniffed from other devices on the network
-- Must haves: destination IP and port (server_addr), payload
+- Must haves: protocol, destination IP, data
 - Not important: remainder of the packet (can add around the payload), header
 
 Code built off of: https://stackoverflow.com/questions/15049143/raw-socket-programming-udp-python
@@ -34,8 +34,8 @@ def spyware():
     # Not modifiable
     protocol = '11' # UDP protocol
     dest_ip = '0b16212c' # pretending malicious server is at 11.22.33.44
-    # dest_port = '076e' I think this can be anything as long as the server knows
     data = '4e4f5449465920414c49564520534444502f312e300d0a46726f6d3a20223139322e3136382e312e34373a31393032220d0a486f73743a2022536f6e6f732d373832384341424135423743220d0a4d61782d4167653a20313830300d0a547970653a2022736f6e6f733a5a6f6e65706c61796572220d0a5072696d6172792d50726f78793a20226d656469615f73657276696365220d0a50726f786965733a20226d656469615f736572766963652c616d706c6966696572220d0a4d616e7566616374757265723a2022536f6e6f73220d0a4d6f64656c3a20225a6f6e65706c61796572220d0a4472697665723a2022736f6e6f732e63347a220d0a'  # data from sniffed packet
+    # dest_port = '076e' I think this can be anything as long as the server knows
 
     # Modifiable
     ethernet_layer = '01005e7ffffa7828caba5b7c0800'
@@ -47,12 +47,26 @@ def spyware():
 
 '''
 (3) Worm:
-ICMP neighbor solicitation message with self-propagating worm code ('Hello World' code)
-- Must haves: data field, type = 135
+ICMPv6 neighbor solicitation message with self-propagating worm code ('Hello World' code)
+- Must haves: protocol, data field, ICMP type
 - Not important: destination, query, length
 '''
-def worm(sock):
-    pass
+def worm():
+    # TODO: Change to ICMP ECHO so there is a payload section
+    # # Not modifiable
+    # protocol = '3a'
+    # icmp_type = '87' # type = 135 for neighbor solicitation
+    # data = '7072696e74282768656c6c6f20776f726c64212729' # hello world python code: print('hello world!')
+    #
+    # # Modifiable
+    # ethernet_layer = '3333ff9c30437828caba5b7c86dd'
+    # ip_layer = '600000000020' + protocol + 'fffe800000000000007a28cafffeba5b7cff0200000000000000000001ff9c3043'
+    # icmp_layer = icmp_type + '00629100000000fe8000000000000010a049ee209c304301017828caba5b7c'
+    # packet = ethernet_layer + ip_layer + icmp_layer + data
+    #
+    # print(packet == '3333ff9c30437828caba5b7c86dd6000000000203afffe800000000000007a28cafffeba5b7cff0200000000000000000001ff9c30438700629100000000fe8000000000000010a049ee209c304301017828caba5b7c')
+    # return packet
+    return 'WIP'
 
 '''
 (4) Botnet:
@@ -60,15 +74,15 @@ Domain Name System (DNS) query to C&C [nslookup somesite.com cc_IP]
 - Must haves: destination IP and port
 - Not important: remainder of the query packet
 '''
-def botnet(sock):
+def botnet():
     pass
 
 def main():
     # ---- Spyware attack ---- #
     print("Spyware packet:\n" + spyware())
 
-    # ---- Malware attack ---- #
-    #print("Malware packet:\n" + malware())
+    # ---- Worm attack ---- #
+    print("Worm packet:\n" + worm())
 
 if __name__== "__main__":
   main()
