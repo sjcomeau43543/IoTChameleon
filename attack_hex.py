@@ -71,7 +71,7 @@ def worm():
 '''
 (4) Botnet:
 Domain Name System (DNS) query to C&C [nslookup somesite.com cc_IP]
-- Must haves: destination IP and port
+- Must haves: destination IP
 - Not important: remainder of the query packet
 '''
 def botnet():
