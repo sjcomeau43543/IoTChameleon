@@ -230,13 +230,119 @@ def get_data(dataset_csv, use_cols, device, dsc):
     # return sequences
     return seqs
 
+def get_scores(predicted, actual):
+    tp = 0
+    tn = 0
+    fp = 0
+    fn = 0
+
+    for p, a in zip(predicted, actual):
+        if p == a:
+            if a == 1:
+                tp = tp + 1
+            else:
+                tn = tn + 1
+        else:
+            if a == 1:
+                fn = fn + 1
+            else:
+                fp = fp + 1
+
+    print(tp, tn, fp, fn)
+
+    acc = (tp + tn) / (tp + tn + fp + fn)
+    prec = 0 if (tp+fp)==0 else tp / (tp + fp)
+    reca = 0 if (tp+fn)==0 else tp / (tp + fn)
+    f1sc = 0 if (prec+reca)==0 else 2*prec*reca / (prec + reca)
+
+    print(acc, prec, reca, f1sc)
+
+
 # get_baseline_accuracies()
-watch_classifier = DeviceSequenceClassifier('./models', "./models/watch/watch_cart_entropy_100_samples_leaf.pkl", is_model_pkl=True)
-watch_data = get_data('data/validation.csv', pd.read_csv(os.path.abspath("data/use_cols.csv")), 'watch', watch_classifier)
 
-import pdb; pdb.set_trace()
-
-print(watch_classifier.model.predict(watch_data[0]))
+# ----------
 # 
+classifnames = { 'baby_monitor'   : 'baby_monitor_cart_gini_200_samples_leaf',
+                'lights'         : 'lights_cart_gini_200_samples_leaf',
+                'motion_sensor'  : 'motion_sensor_cart_entropy_200_samples_leaf',
+                'security_camera': 'security_camera_cart_entropy_200_samples_leaf',
+                'smoke_detector' : 'smoke_detector_cart_entropy_200_samples_leaf',
+                'socket'         : 'socket_cart_entropy_200_samples_leaf',
+                # 'thermostat'     : '',
+                # 'tv'             : 'tv_cart_gini_50_samples_leaf',
+                'watch'          : 'watch_cart_entropy_100_samples_leaf',
+                # 'water_sensor'   : 'water_sensor_cart_entropy_100_samples_leaf'
+              }
 
+classifiers = { 'baby_monitor'   : DeviceSequenceClassifier('./models', "./models/baby_monitor/"+classifnames['baby_monitor']+".pkl", is_model_pkl=True),
+                'lights'         : DeviceSequenceClassifier('./models', "./models/lights/"+classifnames['lights']+".pkl", is_model_pkl=True),
+                'motion_sensor'  : DeviceSequenceClassifier('./models', "./models/motion_sensor/"+classifnames['motion_sensor']+".pkl", is_model_pkl=True),
+                'security_camera': DeviceSequenceClassifier('./models', "./models/security_camera/"+classifnames['security_camera']+".pkl", is_model_pkl=True),
+                'smoke_detector' : DeviceSequenceClassifier('./models', "./models/smoke_detector/"+classifnames['smoke_detector']+".pkl", is_model_pkl=True),
+                'socket'         : DeviceSequenceClassifier('./models', "./models/socket/"+classifnames['socket']+".pkl", is_model_pkl=True),
+                # 'thermostat'     : '',
+                # 'tv'             : DeviceSequenceClassifier('./models', "./models/tv/"+classifnames['tv']+".pkl", is_model_pkl=True),
+                'watch'          : DeviceSequenceClassifier('./models', "./models/watch/"+classifnames['watch']+".pkl", is_model_pkl=True),
+                # 'water_sensor'   : DeviceSequenceClassifier('./models', "./models/water_sensor/"+classifnames['water_sensor']+".pkl", is_model_pkl=True),
+              }
+
+data        = { 'baby_monitor'   : get_data('data/validation.csv', pd.read_csv(os.path.abspath("data/use_cols.csv")), 'baby_monitor', classifiers['baby_monitor']),
+                'lights'         : get_data('data/validation.csv', pd.read_csv(os.path.abspath("data/use_cols.csv")), 'lights', classifiers['lights']),
+                'motion_sensor'  : get_data('data/validation.csv', pd.read_csv(os.path.abspath("data/use_cols.csv")), 'motion_sensor', classifiers['motion_sensor']),
+                'security_camera': get_data('data/validation.csv', pd.read_csv(os.path.abspath("data/use_cols.csv")), 'security_camera', classifiers['security_camera']),
+                'smoke_detector' : get_data('data/validation.csv', pd.read_csv(os.path.abspath("data/use_cols.csv")), 'smoke_detector', classifiers['smoke_detector']),
+                'socket'         : get_data('data/validation.csv', pd.read_csv(os.path.abspath("data/use_cols.csv")), 'socket', classifiers['socket']),
+                # 'thermostat'     : '',
+                # 'tv'             : get_data('data/validation.csv', pd.read_csv(os.path.abspath("data/use_cols.csv")), 'tv', classifiers['tv']),
+                'watch'          : get_data('data/validation.csv', pd.read_csv(os.path.abspath("data/use_cols.csv")), 'watch', classifiers['watch']),
+                # 'water_sensor'   : get_data('data/validation.csv', pd.read_csv(os.path.abspath("data/use_cols.csv")), 'water_sensor', classifiers['water_sensor']),
+              }
+
+results     = { 'baby_monitor'   : [],
+                'lights'         : [],
+                'motion_sensor'  : [],
+                'security_camera': [],
+                'smoke_detector' : [],
+                'socket'         : [],
+                # 'thermostat'     : [],
+                # 'tv'             : [],
+                'watch'          : [],
+                # 'water_sensor'   : [],
+              }
+
+for device in classifiers.keys():
+    print("getting results for", device)
+    r = results[device]
+    p = []
+    a = []
+
+    modeldev = classifiers[device]
+
+    for device2 in classifiers.keys():
+        datadev2 = data[device2]
+        print("\tcomparing to", device2, len(datadev2))
+
+        r2 = 0
+        for d in datadev2:
+            e = classifiers[device].model.predict(d)
+            e = e[0]
+            
+            if e == 1:
+                r2 = r2+1
+
+            # for later
+            if device2 == device:
+                a.append(1)
+            else:
+                a.append(0)
+            p.append(e)
+        r.append(r2)
+
+    get_scores(p, a)
+
+print("Printing results for confusion")
+print(results)
+
+
+# get_scores([0,0,1,1,1,1,1,1,1,1,0], [0,0,0,0,0,0,0,0,0,0,1])
 
