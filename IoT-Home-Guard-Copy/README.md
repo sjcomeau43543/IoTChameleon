@@ -9,3 +9,7 @@ To run:
     - Create functions to analyze the protocols listed in the yaml file --> be sure to list the proper index in when using self.rules['packet'][#]
     - Call the functions in traffic_analyze(self,packet)
   - $ python3 software_tools/IoT-Home-Guard.py
+
+To create pcaps from text file:
+  - Make sure text file (packet.txt) is in the form of a hex dump (rows are labelled and there are spaces between bytes)
+  - $ text2pcap -d packet.txt packet.pcap
