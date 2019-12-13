@@ -38,3 +38,7 @@ packet:
       dst_IP: "-"
       src_port: 34618
       dst_port: 1900
+
+    - protocol: ICMP
+      src_IP: "*"
+      dst_IP: 192.168.1.64

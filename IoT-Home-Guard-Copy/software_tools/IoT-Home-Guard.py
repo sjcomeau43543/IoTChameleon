@@ -13,6 +13,6 @@ if __name__ == "__main__":
     # engine.run()
 
     #pcap_file = '/Users/edamame/Downloads/sonos_speaker.pcap'
-    pcap_file = '/Users/edamame/Downloads/CS558_comp_net/IoTChameleon/botnet_packet.pcap'
+    pcap_file = '/Users/edamame/Downloads/CS558_comp_net/IoTChameleon/spyware_packet.pcap'
     engine = TrafficAnalysisEngine(pcap_file, "sonos")
     engine.run()

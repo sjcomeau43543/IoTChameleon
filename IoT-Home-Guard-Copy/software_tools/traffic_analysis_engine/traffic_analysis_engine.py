@@ -33,7 +33,7 @@ class TrafficAnalysisEngine(object):
 		else:
 			return False
 
-	# ----Added, not in original code ---- #
+	# ----Added function, not in original code ---- #
 	def DNS_analyze(self,packet):
 		for dns_IP in self.DNS_server_ip:
 			if (packet['ip'].src == self.rules['device'][0]) and (packet['ip'].dst == dns_IP): #and (packet.info.split(' ')[0] == self.rules['packet'][1]['src_port']) and (packet.info.split(' ')[2] == self.rules['packet'][1]['dst_port']):
@@ -48,18 +48,30 @@ class TrafficAnalysisEngine(object):
 				return True
 		return False
 
+	# ----Added function, not in original code ---- #
+	def ICMP_analyze(self,packet):
+		if (packet['ip'].src == self.rules['device'][0]) and (packet['ip'].dst == self.rules['packet'][4]['dst_IP']): #and (packet.info.split(' ')[0] == self.rules['packet'][1]['src_port']) and (packet.info.split(' ')[2] == self.rules['packet'][1]['dst_port']):
+			return True
+		else:
+			return False
 
 	def traffic_analyze(self,packet):
 		prot = packet.transport_layer
 
-		if prot == "UDP":
-			if packet[3].layer_name == 'dns':
-				return self.DNS_analyze(packet)
-			else:
-				return self.UDP_analyze(packet)
+		try:
+			if prot == "UDP":
+				if packet[3].layer_name == 'dns':
+					return self.DNS_analyze(packet)
+				else:
+					return self.UDP_analyze(packet)
 
-		if prot == "TCP" and packet[3].layer_name == 'http':
-			return self.HTTP_analyze(packet)
+			if prot == "TCP" and packet[3].layer_name == 'http':
+				return self.HTTP_analyze(packet)
+
+			if not prot == 'None'and packet.icmp:
+				return self.ICMP_analyze(packet)
+		except:
+			print("Protocol not accounted for")
 
 		return True
 
