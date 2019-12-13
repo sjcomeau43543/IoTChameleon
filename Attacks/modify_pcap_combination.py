@@ -14,6 +14,8 @@ import numpy as np
 from pcapfile import savefile
 from pcapfile.protocols.linklayer import ethernet
 from pcapfile.protocols.network import ip
+from pcapfile.protocols.transport import tcp
+from pcapfile.protocols.transport import udp
 import binascii
 
 
@@ -83,7 +85,10 @@ attack = savefile.load_savefile(pc, verbose=True)
 raw = attack.packets[0].raw()
 
 eth_frame = ethernet.Ethernet(raw)
-ip_packet = ip.IP(binascii.unhexlify(eth_frame.payload))
+
+# only for spyware packet 
+
+'''ip_packet = ip.IP(binascii.unhexlify(eth_frame.payload))
 
 # fields I need to add to advers features from packet
 ack = ip_packet.flags ^ 2
@@ -92,6 +97,18 @@ http_GET = 1
 http_POST = 0
 packets = 1
 ttl = ip_packet.ttl
+is_http = 1
+is_port_80 = 1
+suffix_is_com = 1'''
+
+# for all other packets
+tcp_packet = tcp.TCP(binascii.unhexlify(eth_frame.payload))
+# fields I need to add to advers features from packet
+ack = tcp_packet.ack
+bytes = tcp_packet.sum
+http_GET = 1
+http_POST = 0
+packets = 1
 is_http = 1
 is_port_80 = 1
 suffix_is_com = 1
@@ -109,7 +126,7 @@ attack_adv_features['bytes'] = bytes
 attack_adv_features['http_GET'] = http_GET
 attack_adv_features['http_POST'] = http_POST
 attack_adv_features['packets'] = packets
-attack_adv_features['ttl_A_avg'] = ttl
+# attack_adv_features['ttl_A_avg'] = ttl
 attack_adv_features['is_http'] = is_http
 attack_adv_features['B_port_is_80'] = is_port_80
 attack_adv_features['suffix_is_com'] = suffix_is_com
