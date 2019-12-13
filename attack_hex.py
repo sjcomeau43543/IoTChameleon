@@ -21,6 +21,7 @@ HTTP/HTTPS GET request to a malicious host
 '''
 def malware():
     packet = ''
+    # GET /malware.zip
 
 '''
 (2) Spyware:
